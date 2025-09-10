@@ -152,7 +152,7 @@ export async function register(registration) {
         const response = await api.post("/auth/register-user", registration)
         return response.data
     } catch(error) {
-        if (error.reponse && error.response.data) {
+        if (error.response && error.response.data) {
             throw new Error(error.response.data)
         }
         else {
