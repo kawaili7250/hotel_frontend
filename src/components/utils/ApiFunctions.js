@@ -2,7 +2,7 @@ import axios from "axios"
 
 export const api = axios.create({
     /*baseURL: "http://localhost:9192"*/
-    baseURL: process.env.REACT_APP_API_URL
+    baseURL: "https://hotel-backend-5ol9.onrender.com"
 })
 
 export const getHeader = () => {
