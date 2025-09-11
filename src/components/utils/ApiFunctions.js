@@ -26,7 +26,9 @@ export async function addRoom(photo, roomType, roomPrice) {
     formData.append("roomType", roomType);
     formData.append("roomPrice", roomPrice);
 
-    const response = await api.post("/rooms/add/new-room", formData);
+    const response = await api.post("/rooms/add/new-room", formData, {
+		headers: getHeader()
+	});
     if (response.status === 201) {
         return true;
     }
@@ -58,7 +60,9 @@ export async function getAllRooms() {
 /* This function deletes a room by the Id */
 export async function deleteRoom(roomId) {
     try {
-        const result = await api.delete(`/rooms/delete/room/${roomId}`);
+        const result = await api.delete(`/rooms/delete/room/${roomId}`, {
+			headers: getHeader()
+		});
         return result.data;
     } catch(error) {
         throw new Error("Error deleting room ${error.message}");
@@ -151,8 +155,8 @@ export async function register(registration) {
     //console.log("Base URL:", process.env.REACT_APP_API_URL);
 	try {
         const response = await api.post("/auth/register-user", registration)
-		console.log("response: ", response)
-		console.log("response data: ", response.data)
+		console.log("response: ", response);
+		console.log("response data: ", response.data);
         return response.data
     } catch(error) {
         if (error.response && error.response.data) {
