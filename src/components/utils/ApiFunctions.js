@@ -148,9 +148,11 @@ export async function getAvailableRooms(checkInDate, checkOutDate, roomType) {
 
 /* */
 export async function register(registration) {
-    console.log("Base URL:", process.env.REACT_APP_API_URL);
+    //console.log("Base URL:", process.env.REACT_APP_API_URL);
 	try {
         const response = await api.post("/auth/register-user", registration)
+		console.log("response: ", response)
+		console.log("response data: ", response.data)
         return response.data
     } catch(error) {
         if (error.response && error.response.data) {
