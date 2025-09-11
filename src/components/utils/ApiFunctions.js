@@ -5,19 +5,19 @@ export const api = axios.create({
     baseURL: "https://hotel-backend-5ol9.onrender.com"
 })
 
-export const getHeader = () => {
-    const token = localStorage.getItem("token")
+export const getHeader = (isFormData = false) => {
+    const token = localStorage.getItem("token");
     if (token) {
-      return {
-        Authorization : `Bearer ${token}`,
-        "Content-Type" : "application/json"
-      }
+        return isFormData
+            ? { Authorization: `Bearer ${token}` } // don't set Content-Type
+            : {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+              };
     } else {
-        return {
-          "Content-Type" : "application/json"
-        }
+        return isFormData ? {} : { "Content-Type": "application/json" };
     }
-} 
+};
 
 /* This function add a new room to database */
 export async function addRoom(photo, roomType, roomPrice) {
@@ -27,7 +27,7 @@ export async function addRoom(photo, roomType, roomPrice) {
     formData.append("roomPrice", roomPrice);
 
     const response = await api.post("/rooms/add/new-room", formData, {
-		headers: getHeader()
+		headers: getHeader(true)
 	});
     if (response.status === 201) {
         return true;
@@ -61,7 +61,7 @@ export async function getAllRooms() {
 export async function deleteRoom(roomId) {
     try {
         const result = await api.delete(`/rooms/delete/room/${roomId}`, {
-			headers: getHeader()
+			headers: getHeader(false)
 		});
         return result.data;
     } catch(error) {
@@ -75,7 +75,9 @@ export async function updateRoom(roomId, roomData) {
     formData.append("roomType", roomData.roomType);
     formData.append("roomPrice", roomData.roomPrice);
     formData.append("photo", roomData.photo);
-    const response = await api.put(`/rooms/update/${roomId}`, formData);
+    const response = await api.put(`/rooms/update/${roomId}`, formData, {
+		getHeader(true)
+	});
 
     return response;
 }
